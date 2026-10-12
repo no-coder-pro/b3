@@ -98,7 +98,7 @@ async function startChecking() {
                     continue;
                 }
             } else {
-                response = await fetch(`${baseUrl}/check?card=${encodeURIComponent(card)}`, {
+                response = await fetch(`${baseUrl}/api/check?cc=${encodeURIComponent(card)}`, {
                     method: 'GET'
                 });
             }
