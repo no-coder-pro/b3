@@ -1,5 +1,5 @@
-// PASTE YOUR VERCEL API URL HERE
-const VERCEL_API_URL = "https://b3-checker-eight.vercel.app/";
+// B3 Vercel API URL
+const VERCEL_API_URL = "https://b3-two-henna.vercel.app";
 
 const checkBtn = document.getElementById('check-btn');
 const stopCheckBtn = document.getElementById('stop-check-btn');
@@ -107,20 +107,24 @@ async function startChecking() {
 
             const data = await response.json();
 
+            // b3 API returns: {status: 'Live'|'Dead', reason: '...', card: '...', account: '...'}
             let status = 'Unknown';
-            if (data.status === 'APPROVED') status = 'Live';
-            else if (data.status === 'DECLINED') status = 'Dead';
+            if (data.status === 'Live' || data.status === 'APPROVED') status = 'Live';
+            else if (data.status === 'Dead' || data.status === 'DECLINED') status = 'Dead';
+
+            const info = data.reason || data.response || '';
+            const src = data.account || data.cookie_source || '';
 
             if (status === 'Live') {
                 liveCount++;
                 liveNumbersTextarea.value += card + "\n";
-                appendToStatusOutput(`Result: 🟢 Live [${data.cookie_source}] - ${data.response}\n`);
+                appendToStatusOutput(`Result: 🟢 Live [${src}] - ${info}\n`);
             } else if (status === 'Dead') {
                 deadCount++;
                 deadNumbersTextarea.value += card + "\n";
-                appendToStatusOutput(`Result: 🔴 Dead [${data.cookie_source}] - ${data.response}\n`);
+                appendToStatusOutput(`Result: 🔴 Dead [${src}] - ${info}\n`);
             } else {
-                appendToStatusOutput(`Result: ⚪ Unknown [${data.cookie_source}] - ${data.response}\n`);
+                appendToStatusOutput(`Result: ⚪ Unknown [${src}] - ${info}\n`);
             }
 
             updateSummaryCounts(liveCount, deadCount);
